@@ -1,0 +1,17 @@
+{
+  "name": "praxigento/mage_app_prxgt_demo",
+  "type": "magento-module",
+  "license": "proprietary",
+  "homepage": "https://github.com/praxigento/mage_app_prxgt_demo",
+  "description": "Project for Demo Store of Praxigento Store.",
+  "authors": [
+    {
+      "name": "Alex Gusev",
+      "email": "flancer64@gmail.com"
+    },
+    {
+      "name": "Dmitry Makhov",
+      "email": "dmitriimakhov@gmail.com"
+    }
+  ]
+}
