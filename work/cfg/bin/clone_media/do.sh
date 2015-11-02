@@ -14,7 +14,7 @@ LOCAL_GROUP=${LOCAL_GROUP}
 # instance independend environment
 BIN_ROOT=$LOCAL_ROOT/bin/clone_media
 MEDIA_ROOT=$LOCAL_MEDIA_ROOT
-ARCHIVE_NAME=mage_app_prxgt_store_media.tar.gz
+ARCHIVE_NAME=mage_app_prxgt_demo_media.tar.gz
 
 
 ssh $REMOTE_SSH_URL  < $BIN_ROOT/remote_dump.sh
@@ -23,4 +23,4 @@ rm -fr $MEDIA_ROOT
 mkdir -p $MEDIA_ROOT
 tar -zxf $BIN_ROOT/$ARCHIVE_NAME -C $MEDIA_ROOT
 chown -R $LOCAL_OWNER:$LOCAL_GROUP $MEDIA_ROOT
-ln -sT $MEDIA_ROOT $LOCAL_ROOT/mage/media
+ln -sT $MEDIA_ROOT $LOCAL_ROOT/htdocs/media

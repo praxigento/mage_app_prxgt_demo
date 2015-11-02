@@ -10,7 +10,7 @@ SSH_ROOT=${REMOTE_SSH_ROOT}
 
 # instance independend environment
 BIN_ROOT=$LOCAL_ROOT/bin/clone_db
-DB_DUMP=mage_app_prxgt_store_dump.sql
+DB_DUMP=mage_app_prxgt_demo_dump.sql
 
 ssh $SSH_URL  < $BIN_ROOT/remote_dump.sh
 scp $SSH_URL:$SSH_ROOT/bin/dump_db/$DB_DUMP.tar.gz $BIN_ROOT/

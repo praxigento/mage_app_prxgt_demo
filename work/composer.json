@@ -23,7 +23,7 @@
         "praxigento/mage_ext_login_as": "*",
         "praxigento/mage_ext_tuneup": "*",
         "praxigento/mage_ext_jira_feedback": "*",
-        "praxigento/mage_app_prxgt_store": "*@dev"
+        "praxigento/mage_app_prxgt_demo": "*@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"

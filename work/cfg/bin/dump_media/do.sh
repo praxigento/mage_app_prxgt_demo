@@ -8,7 +8,7 @@ LOCAL_ROOT=${LOCAL_ROOT}
 LOCAL_ROOT_MEDIA=${LOCAL_MEDIA_ROOT}
 
 # instance independend environment
-ARCHIVE_NAME=mage_app_prxgt_store_media.tar.gz
+ARCHIVE_NAME=mage_app_prxgt_demo_media.tar.gz
 MEDIA_ARCHIVE=$LOCAL_ROOT/bin/dump_media/$ARCHIVE_NAME
 
 echo "Remove archive of the Magento media data ($MEDIA_ARCHIVE)."

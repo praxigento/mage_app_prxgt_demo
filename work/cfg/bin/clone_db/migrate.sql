@@ -4,7 +4,7 @@
 drop database if exists ${CFG_DB_NAME};
 create database ${CFG_DB_NAME} character set utf8 collate utf8_unicode_ci;
 use ${CFG_DB_NAME};
-source ${LOCAL_ROOT}/bin/clone_db/mage_ad_dump.sql;
+source ${LOCAL_ROOT}/bin/clone_db/mage_prxgt_demo_dump.sql;
 
 --
 --      Change instance specific config.

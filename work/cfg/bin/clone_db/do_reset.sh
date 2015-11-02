@@ -11,7 +11,7 @@ LOCAL_ROOT=${LOCAL_ROOT}
 
 # instance independend environment
 BIN_ROOT=$LOCAL_ROOT/bin/clone_db
-DB_DUMP=mage_app_prxgt_store_dump.sql
+DB_DUMP=mage_app_prxgt_demo_dump.sql
 
 if [ ! -e $BIN_ROOT/$DB_DUMP ]; then
     echo "'$DB_DUMP' does not exist. Place Magento DB SQL dump to '$BIN_ROOT/$DB_DUMP' and launch this script again."
