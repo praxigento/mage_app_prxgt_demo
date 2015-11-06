@@ -1,0 +1,33 @@
+/* Block: Order from Catalog */
+.block-order #items {padding:3px 6px 6px 6px;}
+.block-order .input-box {display:inline-block; vertical-align:top; zoom: 1; *display:inline;}
+.block-order .validation-advice {display:none !important;}
+.block-order input.input-text:focus {background:#fff;}
+.block-order .box-sku {width:70px; margin-right:4px;}
+.block-order .box-sku input.input-text {width:64px;}
+.block-order .box-qty {width:39px;}
+.block-order .box-qty input.input-text {width:33px;}
+.block-order .btn-go {float:left; margin:0 0 0 4px;}
+.block-order .btn-rm {padding-left:5px;padding-top:1px;}
+.block-order .btn-rm span {border:0px;vertical-align:top; width:12px; height:12px !important; padding:0px; background:url("../../images/btn_remove.gif") no-repeat scroll 0 0 transparent !important;}
+.block-order .btn-plus {margin-left:5px;}
+.block-order .btn-plus span { font-size:14px; }
+.block-order div.row {margin-top:3px; height:22px;}
+/* popup */
+.top-visibility { display:block !important;}
+#prxgt_qof_suggestion { position:absolute; width:200px; height:auto; z-index: 10000; display:none; background: #fff; border: 1px solid #B6B6B6; border-bottom: 0px; cursor:pointer; }
+#prxgt_qof_suggestion ul {overflow:auto;}
+#prxgt_qof_suggestion li {float:none !important; height:auto; line-height:30px; padding: 5px !important; border-bottom:#B6B6B6 1px solid; clear:both; background: #fff !important;}
+#prxgt_qof_suggestion li span { text-decoration:none; padding:0px; display:block; }
+#prxgt_qof_suggestion li span.product-image img { float: left; padding-right:5px; }
+#prxgt_qof_suggestion li p { padding-left: 0px; line-height:18px; }
+#prxgt_qof_suggestion li p.product-name { color:#0A263C !important; font-size: 1em; font-weight: normal; }
+#prxgt_qof_suggestion li span.price { color:#0A263C !important; font-size:11px; }
+
+#prxgt_qof_widget_title SPAN {float:left;}
+#prxgt_qof_ajax_loader {padding-left:10px;}
+
+.prxgt_qof_suggestion_no_data {padding: 5px 0px 0px 5px;}
+
+.prxgt_qof_product_type {display:none;}
+.prxgt_qof_is_row_locked {display:none;}

@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) 2013, Praxigento
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
+ *  - Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ *      disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *      following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/** @var $this Mage_Catalog_Block_Product_List */
+?>
+<?php if (($this->getProductCollection() instanceof Varien_Data_Collection_Db) && (count($this->getProductCollection()) > 0)): ?>
+    <?php $items = $this->getProductCollection()->getItems() ?>
+    <?php $height = min(count($items) * 61, 300) ?>
+    <?php if (count($items)): ?>
+        <ul style="overflow:auto; height:<?php echo $height ?>px">
+            <?php foreach ($items as $product): ?>
+                <?php $img = $product->getImage(); ?>
+                <li class="suggest-item" id="prxgt_qof_suggestion_item_<?php echo $product->getSku() ?>"
+                    title="<?php echo $product->getSku() ?>">
+                    <div class="product-details">
+                        <p class="product-name">
+                            <span class="product-image">
+                                <img width="50" height="50"
+                                     src="<?php echo Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(50) ?>"
+                                     alt="<?php echo Mage::helper('core/string')->stripTags($product->getThumbnailLabel(), null, true) ?>">
+                            </span>
+                            <span><?php echo Mage::helper('core/string')->stripTags($product->getName()) ?></span>
+                            <span
+                                class="price nobr"><?php echo Mage::helper('core')->formatPrice($product->getMinimalPrice(), false) ?></span>
+                            <?php if (!$product->getStockItem()->getIsInStock()) : ?>
+                                <span style="color:red"><?php echo $this->__('Out of stock') ?></span>
+                            <?php endif; ?>
+                        </p>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <?php /** Invisible attributes of the row - are used on the front UI */?>
+                    <div class="prxgt_qof_product_type"><?php echo $product->getTypeId() ?></div>
+                    <div class="prxgt_qof_is_row_locked">false</div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="prxgt_qof_suggestion_no_data">
+        <p><?php echo $this->__('No data for query: %s', $this->getData(Praxigento_Quickorder_Config::REQ_PARAM_QUERY)) ?></p>
+    </div>
+<?php endif; ?>

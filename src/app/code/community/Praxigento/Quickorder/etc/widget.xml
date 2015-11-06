@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<widgets>
+    <prxgt_qof_widget type="prxgt_qof_block/widget" translate="name description" module="prxgt_qof_helper">
+        <name>Praxigento Quick Order Widget</name>
+        <description>Form allows to order products by their attributes</description>
+        <is_email_compatible>0</is_email_compatible>
+        <parameters>
+            <minimum_characters translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>2</value>
+                <label>Minimal number of symbols required to start showing suggestion list</label>
+                <type>text</type>
+            </minimum_characters>
+            <ajax_delay translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>500</value>
+                <label>Input delay for suggestion request (in msec, default: 500; max: 10000)</label>
+                <type>text</type>
+            </ajax_delay>
+            <title translate="label value">
+                <required>1</required>
+                <visible>1</visible>
+                <value>Quick Order Widget</value>
+                <label>Widget Title</label>
+                <type>text</type>
+            </title>
+            <attribute_field_title translate="label value">
+                <required>1</required>
+                <visible>1</visible>
+                <value>SKU</value>
+                <label>Title for SKU field</label>
+                <type>text</type>
+            </attribute_field_title>
+            <qty_field_title translate="label value">
+                <required>1</required>
+                <visible>1</visible>
+                <value>Qty</value>
+                <label>Title for QTY field</label>
+                <type>text</type>
+            </qty_field_title>
+            <template>
+                <required>1</required>
+                <visible>0</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>prxgt/qof/quick_order_form.phtml</value>
+            </template>
+        </parameters>
+    </prxgt_qof_widget>
+</widgets>

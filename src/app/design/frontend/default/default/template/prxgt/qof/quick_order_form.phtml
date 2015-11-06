@@ -1,0 +1,370 @@
+<?php
+/**
+ * Copyright (c) 2013, Praxigento
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
+ *  - Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ *      disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *      following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/**
+ * @var $this Praxigento_Quickorder_Block_Widget
+ */
+?>
+<div class="block block-order" id="prxgt_qof_widget" ng-app>
+    <div class="block-title" id="prxgt_qof_widget_title">
+        <span><strong><?php echo $this->getTitle() ?></strong></span>
+        <span id="prxgt_qof_ajax_loader" style="display:none;"><img
+                src="<?php echo $this->getSkinUrl('prxgt/qof/ajax-loader.gif') ?>"/></span>
+
+        <div style="clear:both;"></div>
+    </div>
+    <form id="prxgt_qof_order" onsubmit="return false;"
+          action="<?php echo Mage::getUrl(Praxigento_Quickorder_Config::ROUTE_ORDER_SUBMIT) ?>"
+          method="post">
+        <div class="block-content" id="block-content">
+            <div id="prxgt_qof_items"></div>
+            <div class="actions">
+                <button type="button" id="prxgt_qof_order_submit" tabindex="5000" class="button btn-cart"
+                        onclick="prxgtQofSubmit()">
+                    <span><span><?php echo $this->__('Add to Cart') ?></span></span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <div id="prxgt_qof_suggestion" style="display:none;"></div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+/**
+ * Init QOF controls.
+ */
+/** prevent form from submit w/o SKU validation */
+var formValidator = new Validation('prxgt_qof_order', {'onSubmit': false});
+$('prxgt_qof_order_submit').setAttribute('rowIncrementId', 0);
+
+/** close suggestion popup on click event */
+document.observe('click', function (event) {
+    if (Event.element(event).identify() != 'prxgt_qof_suggestion') {
+        prxgtQofCloseSuggestionPopup();
+    }
+});
+
+/**
+ * Submit Quick Order Form to add items to the Cart.
+ */
+function prxgtQofSubmit() {
+    var url = '<?php echo Mage::getUrl(Praxigento_Quickorder_Config::ROUTE_SKU_VALIDATE); ?>';
+    var params = [];
+    $('prxgt_qof_order').select('input[name="prxgtQofSku[]"]').each(function (elm) {
+        params.push({'id': elm.id, 'value': elm.value});
+    });
+    new Ajax.Request(url, {
+        method: 'post',
+        parameters: {prxgtQofSku: Object.toJSON(params)},
+        onComplete: function (transport) {
+            var passed = true;
+            var content = transport.responseText;
+
+            passed = formValidator.validate();
+
+            if (content != '') {
+                content = content.evalJSON();
+                for (var i = 0; i < content.length; i++) {
+                    elem = $(content[i]);
+                    if (elem) {
+                        passed = false;
+                        elem.addClassName('validation-failed');
+                        elem.value = elem.title;
+                        if (i == 0) elem.focus();
+                    }
+                }
+            }
+            if (passed) {
+                $('prxgt_qof_order').submit();
+            } else {
+                $('prxgt_qof_order').select('.validation-failed').first().focus();
+            }
+        }
+    });
+}
+
+/**
+ * Close suggestion popup on click out of popup area.
+ */
+function prxgtQofCloseSuggestionPopup() {
+    $('prxgt_qof_suggestion').removeClassName('top-visibility');
+}
+
+function prxgtQofEventHandlerQty(event) {
+    if (event.keyCode == 13) {
+        var row = this.up(1).next();
+        var sku = false;
+        if (row) {
+            sku = row.select('div.box-sku input')[0];
+        }
+
+        if (sku) {
+            sku.focus();
+        } else {
+            prxgtQofRowAdd();
+            row = this.up(1).next();
+            if (row) {
+                sku = row.select('div.box-sku input')[0];
+            }
+            if (sku) {
+                sku.focus();
+            }
+        }
+        return false;
+    }
+    return false;
+}
+
+/**
+ * QOF-5 : prevent dobuled AJAX requests
+ */
+/** repeated events registry */
+var globalLaunchRegistry;
+
+function prxgtQofGetTimestamp() {
+    /** Base to compose timestamps: > 24 * 36800 sec in day */
+    var tsBase = 100000;
+    var dt = new Date();
+    var totalSec = dt.getMinutes() * 60 + dt.getSeconds();
+    var base = totalSec % tsBase + tsBase;
+    return  base * 1000 + dt.getMilliseconds();
+}
+
+/**
+ * Handle SKU field events and send Ajax request to the server to get suggestion.
+ * @param event
+ * @return {Boolean}
+ */
+function prxgtQofEventHandlerSku(event) {
+    var $this = this;
+
+    /** On Enter go to the Qty field in the row */
+    if (event.keyCode == 13) {
+        var qty = this.up('div.row').select('div.box-qty input')[0];
+        if (qty) {
+            qty.focus();
+        }
+        Event.stop(event);
+        return false;
+    }
+
+    /** QOF-4: request in case of query is changed only */
+    var querySent = $('prxgt_qof_order').getAttribute('querySent');
+
+    /** min length condition */
+    if ($this.value.length < <?php echo $this->getMinimumCharacters() ?>) {
+        $('prxgt_qof_order').setAttribute('querySent', $this.value);
+        return false;
+    }
+    /** QOF-4: prevent doubled requests */
+    if (querySent == $this.value) {
+        return false;
+    } else {
+        $('prxgt_qof_order').setAttribute('querySent', $this.value);
+    }
+
+    /** AJAX request delay on user input */
+    var delay = <?php echo $this->getAjaxDelay() ?>;
+    /** clean up current delayed repeater */
+    if ((globalLaunchRegistry != undefined) && (globalLaunchRegistry['id'] != undefined)) {
+        var timerId = globalLaunchRegistry['id'];
+        clearInterval(timerId);
+    }
+    /** save last event timestamp to check in repeater */
+    var lastEventTime = prxgtQofGetTimestamp();
+    /** run and registry repeater */
+    var timerId = setInterval(function () {
+        var currentEventTime = prxgtQofGetTimestamp();
+        var delta = (currentEventTime - globalLaunchRegistry['last']);
+        if (delta < delay) {
+            return;
+        }
+        /** clear repeater and perform AJAX request */
+        var intervalId = globalLaunchRegistry['id'];
+        clearInterval(intervalId);
+        /** query server about available suggestion */
+        $('prxgt_qof_ajax_loader').setStyle({display: 'block'});
+        var url = '<?php echo Mage::getUrl(Praxigento_Quickorder_Config::ROUTE_SUGGESTION); ?>';
+        var params = {'prxgtQofQuery': $this.value, 'id': $this.id};
+        new Ajax.Request(url, {
+            method: 'post',
+            parameters: params,
+            onComplete: function (transport) {
+                $('prxgt_qof_ajax_loader').setStyle({display: 'none'});
+                var content = transport.responseText;
+                if (content) {
+                    Element.clonePosition($('prxgt_qof_suggestion'), $this, {setWidth: false, setHeight: false, offsetTop: ($this.getHeight() - 1)});
+                    $('prxgt_qof_suggestion').innerHTML = content;
+                    $('prxgt_qof_suggestion').select('.suggest-item').each(function (elm) {
+                        var targets = $A(elm.childElements());
+                        targets.push(elm);
+                        targets.each(function (elm) {
+                            elm.observe('click', function (event) {
+                                element = Event.findElement(event, 'li');
+                                this.value = element.title;
+                                prxgtQofCloseSuggestionPopup();
+                                var qty = this.up('div.row').select('div.box-qty input')[0];
+                                if (qty) {
+                                    qty.focus();
+                                }
+                            }.bind($this));
+                        });
+                    });
+                    $('prxgt_qof_suggestion').addClassName('top-visibility');
+                } else {
+                    prxgtQofCloseSuggestionPopup();
+                }
+            }
+        });
+        return false;
+    }, 100);
+    globalLaunchRegistry = {'id': timerId, 'last': lastEventTime};
+}
+
+/**
+ * Add new row to the form.
+ */
+function prxgtQofRowAdd() {
+    var this_row = new Element('div').addClassName('row');
+    var rowIncrementId = $('prxgt_qof_order_submit').getAttribute('rowIncrementId');
+
+    /** SKU input */
+    var el = new Element('input');
+    el.setAttribute('type', 'text');
+    el.setAttribute('id', 'prxgt_qof_sku' + rowIncrementId);
+    el.setAttribute('tabindex', 10 * rowIncrementId + 2);
+    el.setAttribute('name', 'prxgtQofSku[]');
+    el.setAttribute('autocomplete', 'off');
+    el.setAttribute('value', '<?php echo $this->getAttributeFieldTitle() ?>');
+    el.setAttribute('title', '<?php echo $this->getAttributeFieldTitle() ?>');
+    el.addClassName('input-text');
+    el.addClassName('required-entry');
+    el.observe('keyup', prxgtQofEventHandlerSku);
+    el.observe('blur', prxgtQofInputBlur);
+    el.observe('focus', prxgtQofInputFocus);
+
+    /** SKU div */
+    var div = new Element('div');
+    div.addClassName('input-box');
+    div.addClassName('box-sku');
+    div.insert(el);
+    this_row.insert(div);
+
+    /** QTY input */
+    var el = new Element('input');
+    el.setAttribute('type', 'text');
+    el.setAttribute('id', 'p_qty' + rowIncrementId);
+    el.setAttribute('tabindex', 10 * rowIncrementId + 3);
+    el.setAttribute('name', 'prxgtQofQty[]');
+    el.setAttribute('value', '<?php echo $this->getQtyFieldTitle() ?>');
+    el.setAttribute('title', '<?php echo $this->getQtyFieldTitle() ?>');
+    el.addClassName('input-text');
+    el.addClassName('validate-number');
+    el.observe('keyup', prxgtQofEventHandlerQty);
+    el.observe('blur', prxgtQofInputBlur);
+    el.observe('focus', prxgtQofInputFocus);
+
+    /** QTY div */
+    var div = new Element('div');
+    div.addClassName('input-box');
+    div.addClassName('box-qty');
+    div.insert(el);
+    this_row.insert(div);
+
+    /** ACTIONS div */
+    var div = new Element('div');
+    div.addClassName('input-box');
+
+    /** REMOVE button */
+    var button = new Element('button')
+    button.setAttribute('title', '<?php echo $this->__('Remove Row') ?>');
+    button.setAttribute('type', 'button');
+    button.addClassName('btn-rm');
+    button.addClassName('button');
+    button.observe('click', prxgtQofRowRemove);
+    var el2 = new Element('span');
+    button.insert(el2);
+    div.insert(button);
+
+    /** ADD button */
+    var button = new Element('button')
+    button.setAttribute('title', '<?php echo $this->__('Add More Items') ?>');
+    button.setAttribute('type', 'button');
+    button.addClassName('btn-plus');
+    button.addClassName('button');
+    button.observe('click', prxgtQofRowAdd);
+    var el = new Element('span');
+    el.appendChild(document.createTextNode("<?php echo $this->__('+') ?>"));
+    var el2 = new Element('span');
+    el2.insert(el);
+    button.insert(el2);
+    div.insert({bottom: button});
+    this_row.insert(div);
+
+    $('prxgt_qof_items').insert(this_row);
+
+    $('prxgt_qof_order_submit').setAttribute('rowIncrementId', ++rowIncrementId);
+    prxgtQofRowUpdate();
+}
+
+/**
+ * Add/remove action buttons to the row.
+ */
+function prxgtQofRowUpdate() {
+    var removes = $('block-content').select('.btn-rm');
+    var adds = $('block-content').select('.btn-plus');
+    if (removes.size() == 1) {
+        removes.invoke('hide');
+        adds.invoke('show');
+        return;
+    }
+    $('block-content').select('.btn-rm').invoke('show');
+    $('block-content').select('.btn-plus').invoke('hide');
+    $('block-content').select('.btn-plus').last().show();
+}
+
+function prxgtQofRowRemove() {
+    this.up(1).remove();
+    prxgtQofRowUpdate();
+}
+
+/**
+ * Setup input field title on blur.
+ * @param event
+ */
+function prxgtQofInputBlur(event) {
+    if (this.value == '') {
+        this.value = this.title;
+    }
+}
+
+/**
+ * Clear input field title on focus.
+ * @param event
+ */
+function prxgtQofInputFocus(event) {
+    if (this.value == this.title) {
+        this.value = '';
+    }
+}
+/** add first row to the empty form */
+prxgtQofRowAdd();
+//]]>
+</script>
