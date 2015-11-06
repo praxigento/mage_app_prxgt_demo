@@ -1,0 +1,8 @@
+src/app/code/community/Praxigento/EmbedZoho/Config.php app/code/community/Praxigento/EmbedZoho/Config.php
+src/app/code/community/Praxigento/EmbedZoho/Block/Frontend.php app/code/community/Praxigento/EmbedZoho/Block/Frontend.php
+src/app/code/community/Praxigento/EmbedZoho/Helper/Data.php app/code/community/Praxigento/EmbedZoho/Helper/Data.php
+src/app/code/community/Praxigento/EmbedZoho/etc/system.xml app/code/community/Praxigento/EmbedZoho/etc/system.xml
+src/app/code/community/Praxigento/EmbedZoho/etc/config.xml app/code/community/Praxigento/EmbedZoho/etc/config.xml
+src/app/design/frontend/default/default/layout/prxgt/embd_zoho/embd_zoho_frontend_layout.xml app/design/frontend/default/default/layout/prxgt/embd_zoho/embd_zoho_frontend_layout.xml
+src/app/locale/en_US/prxgt/embd_zoho/prxgt_embd_zoho.csv app/locale/en_US/prxgt/embd_zoho/prxgt_embd_zoho.csv
+src/app/etc/modules/Praxigento_EmbedZoho.xml app/etc/modules/Praxigento_EmbedZoho.xml

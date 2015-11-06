@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2013, Praxigento
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
+ *  - Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ *      disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *      following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+-->
+<config>
+    <tabs>
+        <prxgt>
+            <!-- This is all module's common tab (should be the same for all modules) -->
+            <label>Praxigento</label>
+            <sort_order>1024</sort_order>
+        </prxgt>
+    </tabs>
+    <sections>
+        <prxgt_embd_zoho translate="label">
+            <label>Embed Zoho LiveDesk</label>
+            <tab>prxgt</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>350</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label" module="prxgt_embd_zoho_helper">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <frontend_enabled translate="label comment">
+                            <label>Enable Zoho LiveDesk</label>
+                            <comment>Display Zoho LiveDesk component on the frontend.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </frontend_enabled>
+                        <frontend_code translate="label comment">
+                            <label>Embed Source Code</label>
+                            <comment>HTML source code for Zoho LiveDesk.</comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </frontend_code>
+                    </fields>
+                </general>
+            </groups>
+        </prxgt_embd_zoho>
+    </sections>
+</config>
