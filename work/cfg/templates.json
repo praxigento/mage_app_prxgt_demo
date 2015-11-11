@@ -126,6 +126,26 @@
         "post-status-cmd"
       ],
       "rewrite": true
-    }
+    },
+      "htdocs/app/design/adminhtml/default/default/template/page/header.phtml": {
+          "src": "src/rewrites/header.phtml",
+          "dst": "htdocs/app/design/adminhtml/default/default/template/page/header.phtml",
+          "events": [
+              "post-install-cmd",
+              "post-status-cmd",
+              "post-update-cmd"
+          ],
+          "rewrite": true
+      },
+      "htdocs/app/design/adminhtml/default/default/template/login.phtml": {
+          "src": "src/rewrites/login.phtml",
+          "dst": "htdocs/app/design/adminhtml/default/default/template/login.phtml",
+          "events": [
+              "post-install-cmd",
+              "post-status-cmd",
+              "post-update-cmd"
+          ],
+          "rewrite": true
+      }
   }
 }

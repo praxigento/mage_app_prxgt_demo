@@ -30,12 +30,17 @@
     },
      "extra": {
         "magento-root-dir": "htdocs",
+         "magento-core-deploy" : {
+             "excludes": [
+                 "app/design/adminhtml/default/default/template/page/header.phtml",
+                 "app/design/adminhtml/default/default/template/login.phtml"
+             ],
         "magento-deploystrategy": "copy",
         "magento-deploystrategy-overwrite": {
            "praxigento/mage_app_prxgt_demo": "symlink"
         },
         "magento-force": true,
-        "auto-append-gitignore": false,
+        "git-ignore-append": false,
         "praxigento_templates_config": [
             "./templates.json",
             "./cfg/templates.json"
