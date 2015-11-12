@@ -1,6 +1,6 @@
 src/app/design/frontend/default/default/template/page/html/header.phtml app/design/frontend/default/default/template/page/html/header.phtml
 src/app/design/frontend/default/default/template/page/switch/languages.phtml app/design/frontend/default/default/template/page/switch/languages.phtml
-src/app/local/Mage/Page/etc/config.xml app/local/Mage/Page/etc/config.xml
+src/app/code/local/Mage/Page/etc/config.xml app/code/local/Mage/Page/etc/config.xml
 src/app/design/frontend/default/default/layout/paypal.xml app/design/frontend/default/default/layout/paypal.xml
 src/app/design/frontend/default/default/layout/catalog.xml app/design/frontend/default/default/layout/catalog.xml
 src/app/code/community/Praxigento/EmbedZoho/Config.php app/code/community/Praxigento/EmbedZoho/Config.php
