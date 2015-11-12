@@ -35,12 +35,13 @@
                  "app/design/adminhtml/default/default/template/page/header.phtml",
                  "app/design/adminhtml/default/default/template/login.phtml"
              ],
+             "git-ignore-append": false
+         },
         "magento-deploystrategy": "copy",
         "magento-deploystrategy-overwrite": {
            "praxigento/mage_app_prxgt_demo": "symlink"
         },
         "magento-force": true,
-        "git-ignore-append": false,
         "praxigento_templates_config": [
             "./templates.json",
             "./cfg/templates.json"
