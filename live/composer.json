@@ -7,7 +7,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packages.firegento.com"
+            "url": "https://packages.firegento.com"
         },
         {
             "type": "vcs",
@@ -30,7 +30,7 @@
     },
     "extra": {
         "magento-root-dir": "htdocs",
-        "magento-core-deploy" : {
+        "magento-core-deploy": {
             "excludes": [
                 "app/design/adminhtml/default/default/template/page/header.phtml",
                 "app/design/adminhtml/default/default/template/login.phtml"
@@ -44,5 +44,8 @@
             "./cfg/templates.json"
         ]
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "config": {
+        "secure-http": false
+    }
 }
